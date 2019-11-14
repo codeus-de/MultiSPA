@@ -1,0 +1,20 @@
+Das Gerüst für die Multiframe App basiert auf diesem Artikel:
+https://www.infoq.com/articles/Angular-Core-3/
+
+Übersicht:
+
+Der Rahmen besteht aus einer ASP.Net Core 3.0 MVC Anwendung -> Views werden über Controller gesteuert.
+
+Im Ordner Apps existiert eine Angular App ohne routing und ohne eigenes bootstrapping. Sie kann wiederverwendbare Komponenten für die
+untergeordneten Angular Apps oder (als WebComponent per Angular Elemets) für die übergeodnete MVC Anwendung bereitstellen
+
+Im unterordner Apps/Projects können mehrere Angular Apps angelegt werden, die jeweils in ihre eigene MVC View eingebettet wird. Diese Apps
+laufen in ihrem eigenen iframe.
+
+
+Entwicklung:
+Es werden zwei Powershells benötigt (beide im Verzeichnis Apps):
+1. ng serve --liveReload=false
+2. ng serve App1 --port 4201 --servePath / --baseHref /apps/app1/ --publicHost http://localhost:4201
+
+Jede App muss separat gestartet werden
