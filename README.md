@@ -31,3 +31,18 @@ For the demo app1 type:
 ng serve App1 --port 4201 --servePath / --baseHref /apps/app1/ --publicHost http://localhost:4201
 ```
 
+Live Reload
+------
+By default the MVC site is served via https. If you want to use https on the main site, the angular content needs to be served via https as well in order to make things like live reload working.
+Follow the steps outlined in the LocalCertificate/ folder's readme on how to create a self-signed certificate that will be trusted by chrome (at least version 78)
+
+Uee find & replace to change all links from http://localhost to https://localhost
+
+After the certificate has been installed, you can serve both angular parts with:
+```
+ng serve --liveReload=false --publicHost https://localhost:4200 --ssl --ssl-key ..\..\LocalCertificate\localhost.key --ssl-cert ..\..\LocalCertificate\localhost.crt
+```
+and
+```
+ng serve App1 --port 4201 --servePath / --baseHref /apps/app1/ --publicHost https://localhost:4201 --ssl --ssl-key ..\..\LocalCertificate\localhost.key --ssl-cert ..\..\LocalCertificate\localhost.crt
+```
