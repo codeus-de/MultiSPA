@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -6,10 +6,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
-using MultiSPA.Data;
-using MultiSPA.Data.Entities;
+using PinniCore.Data;
+using PinniCore.Data.Entities;
 
-namespace MultiSPA.Controllers
+namespace PinniCore.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -30,9 +30,13 @@ namespace MultiSPA.Controllers
         [HttpGet("{email}/{pass}", Name = "Get")]
         public async Task<string> Get(string email, string pass)
         {
-            var admin = await userManager.FindByNameAsync("Admin");
-            if (admin != null)
+            bool adminRoleExists = await roleManager.RoleExistsAsync("Admin");
+            if (adminRoleExists)
                 return "Init already completed.";
+
+            var admin = await userManager.FindByNameAsync(email);
+            if (admin != null)
+                return "E-Mail already taken";
 
             try
             {
@@ -57,8 +61,8 @@ namespace MultiSPA.Controllers
             }
 
             // Select the user, and then add the admin role to the user
-            var result = await userManager.CreateAsync(new ApplicationUser() { Email = email, UserName = "Admin" }, pass);
-            var user = await userManager.FindByNameAsync("Admin");
+            var result = await userManager.CreateAsync(new ApplicationUser() { Email = email, UserName = email }, pass);
+            var user = await userManager.FindByNameAsync(email);
             if (!await userManager.IsInRoleAsync(user, "Admin"))
             {
                 var userResult = await userManager.AddToRoleAsync(user, "Admin");
